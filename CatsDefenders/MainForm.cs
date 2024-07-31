@@ -8,9 +8,9 @@ namespace CatsDefenders
 	public partial class MainForm : Form
 	{
 		private PictureBox igrac;
-		private int igracBrzina = 20;
+		private int igracBrzina = 30;
 		private List<PictureBox> meci = new List<PictureBox>();
-		private int meciBrzina = 10;
+		private int meciBrzina = 15;
 		private System.Windows.Forms.Timer gameTimer;
 		private List<PictureBox> Nevzudin = new List<PictureBox>();
 		private int NevzuBrzina = 1;
