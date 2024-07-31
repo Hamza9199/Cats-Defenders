@@ -22,13 +22,13 @@ namespace CatsDefenders
 		private void PostaviIgru()
 		{
 			this.Text = "Cats Defenders";
-			this.ClientSize = new Size(1360, 768);
+			this.ClientSize = new Size(800, 600);
 
 			igrac = new PictureBox
 			{
-				Image = Image.FromFile("C:/Users/Korisnik/Desktop/private/nebitno/veoma bitno/igrac.png"),
+				Image = Image.FromFile("C:/Users/Korisnik/Desktop/private/igrac.png"),
 				Size = new Size(50, 50),
-				Location = new Point(this.ClientSize.Width / 2 - 25, this.ClientSize.Height - 60), // Centriraj igrača
+				Location = new Point(this.ClientSize.Width / 2 - 25, this.ClientSize.Height - 60), 
 				SizeMode = PictureBoxSizeMode.StretchImage
 			};
 
@@ -65,7 +65,7 @@ namespace CatsDefenders
 			PictureBox metak = new PictureBox
 			{
 				Size = new Size(5, 20),
-				Location = new Point(igrac.Left + igrac.Width / 2 - 2, igrac.Top), // Centriraj metak
+				Location = new Point(igrac.Left + igrac.Width / 2 - 2, igrac.Top), 
 				BackColor = Color.Black
 			};
 			this.Controls.Add(metak);
