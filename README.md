@@ -1,4 +1,4 @@
-# Cats-Defenders
+# Cats Defenders
 
 Cats Defenders is an exciting Space Invaders-style game developed in C# using Windows Forms. The game features a classic space shooter dynamic with unique themes and elements. Players control a cat defending its territory against invading enemies with the goal of surviving as long as possible.
 
