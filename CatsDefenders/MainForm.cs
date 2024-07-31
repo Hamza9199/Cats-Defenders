@@ -19,6 +19,12 @@ namespace CatsDefenders
 		private Label bodoviLabel;
 		private Label pauzirajIgru;
 		private bool PauzirajIgru = false;
+		private Panel MenuPanel;
+		private Label nastaviLabel;
+		private Label ugasiLabel;
+		private Label menuText;
+		private int zivoti = 5;
+		private Label zivotText;
 
 		public MainForm()
 		{
@@ -42,31 +48,36 @@ namespace CatsDefenders
 
 			pauzirajIgru = new Label
 			{
-				BackColor = Color.Red,
-				Text = "Pauziraj igru",
+				Text = "Menu",
 				Location = new Point(this.ClientSize.Width - 100, 10),
 				ForeColor = Color.Black,
 				Font = new Font("Arial", 12, FontStyle.Bold),
 				AutoSize = true
-
-				
 			};
 
+			zivotText = new Label
+			{
+				Text = "Zivoti: " + zivoti,
+				Location = new Point(10, 30),
+				ForeColor = Color.Black,
+				Font = new Font("Arial", 12, FontStyle.Bold),
+				AutoSize = true
+			};
+
+			this.Controls.Add(zivotText);
 			this.Controls.Add(bodoviLabel);
 			this.Controls.Add(pauzirajIgru);
-
 			pauzirajIgru.Click += new EventHandler(PauzaClick);
 
 			igrac = new PictureBox
 			{
 				Image = Image.FromFile("C:/Users/Korisnik/Desktop/private/igrac.jpg"),
 				Size = new Size(50, 50),
-				Location = new Point(this.ClientSize.Width / 2 - 25, this.ClientSize.Height - 60), 
+				Location = new Point(this.ClientSize.Width / 2 - 25, this.ClientSize.Height - 60),
 				SizeMode = PictureBoxSizeMode.StretchImage
 			};
 
 			this.Controls.Add(igrac);
-
 			this.KeyDown += new KeyEventHandler(MainForm_KeyDown);
 
 			gameTimer = new System.Windows.Forms.Timer();
@@ -78,7 +89,67 @@ namespace CatsDefenders
 			NevzoTimer.Interval = 1000;
 			NevzoTimer.Tick += (sender, e) => DodajNevzu();
 			NevzoTimer.Start();
+
+			PostaviMenuPanel();
 		}
+
+		private void UgasiLabel_Click(object sender, EventArgs e)
+		{
+			Application.Exit();
+		}
+
+		private void PostaviMenuPanel()
+		{
+			MenuPanel = new Panel
+			{
+				Size = new Size(300, 200), 
+				Location = new Point((this.ClientSize.Width / 2) - 150, (this.ClientSize.Height / 2) - 100),
+				BackColor = Color.FromArgb(185,0,0,0), 
+				Visible = false
+			};
+
+			menuText = new Label
+			{
+				Text = "Cats Defenders",
+				Location = new Point(42, 10), 
+				ForeColor = Color.White,
+				BackColor = Color.Transparent,
+				Font = new Font("Arial", 20, FontStyle.Bold),
+				AutoSize = true,
+				
+			};
+
+			nastaviLabel = new Label
+			{
+				Text = "Nastavi igru",
+				Location = new Point(50, 60), 
+				ForeColor = Color.White,
+				Font = new Font("Arial", 16, FontStyle.Bold),
+				AutoSize = true,
+				BackColor = Color.Transparent,
+				Cursor = Cursors.Hand
+			};
+
+			ugasiLabel = new Label
+			{
+				Text = "Izlaz",
+				Location = new Point(50, 80), 
+				ForeColor = Color.White,
+				Font = new Font("Arial", 16, FontStyle.Bold),
+				AutoSize = true,
+				BackColor = Color.Transparent,
+				Cursor = Cursors.Hand
+			};
+
+			nastaviLabel.Click += new EventHandler(MenuClick);
+			ugasiLabel.Click += new EventHandler(UgasiLabel_Click);
+
+			MenuPanel.Controls.Add(menuText);
+			MenuPanel.Controls.Add(nastaviLabel);
+			MenuPanel.Controls.Add(ugasiLabel);
+			this.Controls.Add(MenuPanel);
+		}
+
 
 		private void MainForm_KeyDown(object sender, KeyEventArgs e)
 		{
@@ -96,14 +167,26 @@ namespace CatsDefenders
 			{
 				Pucaj();
 			}
+
+			if (e.KeyCode == Keys.Escape)
+			{
+				if (PauzirajIgru)
+				{
+					nastaviIgru();
+				}
+				else
+				{
+					pauzirajIgruFunkcija();
+				}
+			}
 		}
 
 		private void Pucaj()
 		{
 			PictureBox metak = new PictureBox
 			{
-				Size = new Size(5, 20),
-				Location = new Point(igrac.Left + igrac.Width / 2 - 2, igrac.Top), 
+				Size = new Size(5, 10),
+				Location = new Point(igrac.Left + igrac.Width / 2 - 2, igrac.Top),
 				BackColor = Color.Black
 			};
 			this.Controls.Add(metak);
@@ -123,7 +206,7 @@ namespace CatsDefenders
 				}
 			}
 
-			for(int i = Nevzudin.Count - 1; i >= 0; i--)
+			for (int i = Nevzudin.Count - 1; i >= 0; i--)
 			{
 				PictureBox nevzo = Nevzudin[i];
 				nevzo.Top += NevzuBrzina;
@@ -131,7 +214,14 @@ namespace CatsDefenders
 				{
 					this.Controls.Remove(nevzo);
 					Nevzudin.Remove(nevzo);
+					zivoti -= 1;
+					zivotText.Text = "Zivoti: " + zivoti;
 				}
+			}
+
+			if (zivoti == 0)
+			{
+				KrajIgre();
 			}
 
 			Sudar();
@@ -172,7 +262,7 @@ namespace CatsDefenders
 					}
 				}
 
-				if(nevzo.Bounds.IntersectsWith(igrac.Bounds))
+				if (nevzo.Bounds.IntersectsWith(igrac.Bounds))
 				{
 					KrajIgre();
 				}
@@ -184,7 +274,6 @@ namespace CatsDefenders
 		{
 			bodovi += 1;
 			bodoviLabel.Text = "Bodovi: " + bodovi;
-
 		}
 
 		private void KrajIgre()
@@ -195,34 +284,41 @@ namespace CatsDefenders
 			Application.Restart();
 		}
 
-		private void Pauza()
+		private void pauzirajIgruFunkcija()
 		{
 			gameTimer.Stop();
 			NevzoTimer.Stop();
-
 			PauzirajIgru = true;
-
-			pauzirajIgru.Text = "Nastavi igru";
-			pauzirajIgru.BackColor = Color.Green;
-
+			MenuPanel.Visible = true;
+			pauzirajIgru.Visible = false;
 		}
+
+
+		private void nastaviIgru()
+		{
+			gameTimer.Start();
+			NevzoTimer.Start();
+			PauzirajIgru = false;
+			MenuPanel.Visible = false;
+			pauzirajIgru.Visible = true;
+		}
+
 
 		private void PauzaClick(object sender, EventArgs e)
 		{
 			if (PauzirajIgru)
 			{
-				gameTimer.Start();
-				NevzoTimer.Start();
-				PauzirajIgru = false;
-
-				pauzirajIgru.Text = "Pauziraj igru";
-				pauzirajIgru.BackColor = Color.Red;
+				nastaviIgru();
 			}
-			else {
-				Pauza();
+			else
+			{
+				pauzirajIgruFunkcija();
 			}
 		}
 
-
+		private void MenuClick(object sender, EventArgs e)
+		{
+			nastaviIgru();
+		}
 	}
 }
