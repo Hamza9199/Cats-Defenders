@@ -8,12 +8,12 @@ namespace CatsDefenders
 	public partial class MainForm : Form
 	{
 		private PictureBox igrac;
-		private int igracBrzina = 10;
+		private int igracBrzina = 20;
 		private List<PictureBox> meci = new List<PictureBox>();
-		private int meciBrzina = 20;
+		private int meciBrzina = 10;
 		private System.Windows.Forms.Timer gameTimer;
 		private List<PictureBox> Nevzudin = new List<PictureBox>();
-		private int NevzuBrzina = 5;
+		private int NevzuBrzina = 2;
 		private System.Windows.Forms.Timer NevzoTimer;
 		private int bodovi = 0;
 		private Label bodoviLabel;
@@ -59,7 +59,7 @@ namespace CatsDefenders
 
 			igrac = new PictureBox
 			{
-				Image = Image.FromFile("C:/Users/Korisnik/Desktop/private/igrac.png"),
+				Image = Image.FromFile("C:/Users/Korisnik/Desktop/private/igrac.jpg"),
 				Size = new Size(50, 50),
 				Location = new Point(this.ClientSize.Width / 2 - 25, this.ClientSize.Height - 60), 
 				SizeMode = PictureBoxSizeMode.StretchImage
