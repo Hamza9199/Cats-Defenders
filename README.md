@@ -18,38 +18,38 @@ Cats Defenders is an exciting Space Invaders-style game developed in C# using Wi
 
 2. **Open the Project in Visual Studio**
 
-       Open the CatsDefenders.sln file in Visual Studio.
+      Open the CatsDefenders.sln file in Visual Studio.
 
 3. **Set Up Image Paths**
    
-       Ensure the image paths (player.png, enemy.png) are correctly set in the code. You may need to adjust paths based on your local environment.
+      Ensure the image paths (player.png, enemy.png) are correctly set in the code. You may need to adjust paths based on your local environment.
 
 5. **Build and Run the Project**
    
-       Build the project by clicking Build -> Build Solution in Visual Studio.
-       Run the game by clicking Start or pressing F5.
+      Build the project by clicking Build -> Build Solution in Visual Studio.
+      Run the game by clicking Start or pressing F5.
 
 ## How to Play
 
-    Use left/right arrow keys to move the cat.
-    Press space bar to shoot bullets at enemies.
-    The goal is to defend your base by destroying enemies before they reach the bottom of the screen.
+   Use left/right arrow keys to move the cat.
+   Press space bar to shoot bullets at enemies.
+   The goal is to defend your base by destroying enemies before they reach the bottom of the screen.
 
 ## Future Development
 
-    Adding different difficulty levels.
-    Implementing a life and scoring system.
-    Enhancing graphics and adding sound effects.
+   Adding different difficulty levels.
+   Implementing a life and scoring system.
+   Enhancing graphics and adding sound effects.
 
 
 ## Contributing
 
-If you want to contribute to the project, feel free to open an issue for suggestions or bugs, or submit a pull request with improvements. Your help is appreciated!
+   If you want to contribute to the project, feel free to open an issue for suggestions or bugs, or submit a pull request with improvements. Your help is appreciated!
 
 
 ## License
 
-This project is open-source under the MIT License.
+   This project is open-source under the MIT License.
 
 For any questions or comments, feel free to reach out via GitHub Issues or email.
 
