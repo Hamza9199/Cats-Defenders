@@ -17,6 +17,8 @@ namespace CatsDefenders
 		private System.Windows.Forms.Timer NevzoTimer;
 		private int bodovi = 0;
 		private Label bodoviLabel;
+		private Label pauzirajIgru;
+		private bool PauzirajIgru = false;
 
 		public MainForm()
 		{
@@ -33,12 +35,27 @@ namespace CatsDefenders
 			{
 				Text = "Bodovi: 0",
 				Location = new Point(10, 10),
-				ForeColor = Color.White,
+				ForeColor = Color.Black,
 				Font = new Font("Arial", 12, FontStyle.Bold),
 				AutoSize = true
 			};
 
+			pauzirajIgru = new Label
+			{
+				BackColor = Color.Red,
+				Text = "Pauziraj igru",
+				Location = new Point(this.ClientSize.Width - 100, 10),
+				ForeColor = Color.Black,
+				Font = new Font("Arial", 12, FontStyle.Bold),
+				AutoSize = true
+
+				
+			};
+
 			this.Controls.Add(bodoviLabel);
+			this.Controls.Add(pauzirajIgru);
+
+			pauzirajIgru.Click += new EventHandler(PauzaClick);
 
 			igrac = new PictureBox
 			{
@@ -165,8 +182,9 @@ namespace CatsDefenders
 
 		private void PovecajBodove()
 		{
-			bodovi += 10;
+			bodovi += 1;
 			bodoviLabel.Text = "Bodovi: " + bodovi;
+
 		}
 
 		private void KrajIgre()
@@ -174,6 +192,35 @@ namespace CatsDefenders
 			gameTimer.Stop();
 			NevzoTimer.Stop();
 			MessageBox.Show("Izgubili ste! Osvojili ste " + bodovi + " bodova.");
+			Application.Restart();
+		}
+
+		private void Pauza()
+		{
+			gameTimer.Stop();
+			NevzoTimer.Stop();
+
+			PauzirajIgru = true;
+
+			pauzirajIgru.Text = "Nastavi igru";
+			pauzirajIgru.BackColor = Color.Green;
+
+		}
+
+		private void PauzaClick(object sender, EventArgs e)
+		{
+			if (PauzirajIgru)
+			{
+				gameTimer.Start();
+				NevzoTimer.Start();
+				PauzirajIgru = false;
+
+				pauzirajIgru.Text = "Pauziraj igru";
+				pauzirajIgru.BackColor = Color.Red;
+			}
+			else {
+				Pauza();
+			}
 		}
 
 
