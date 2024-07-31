@@ -1,6 +1,6 @@
 ﻿namespace CatsDefenders
 {
-	partial class Form1
+	partial class MainForm
 	{
 		private System.ComponentModel.IContainer components = null;
 
@@ -18,7 +18,7 @@
 			this.components = new System.ComponentModel.Container();
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1360, 768);
-			this.Text = "Form1";
+			this.Text = "Cats Defenders";
 		}
 	}
 }

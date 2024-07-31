@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace CatsDefenders
 {
-	public partial class MainForm : Form1
+	public partial class MainForm : Form
 	{
 		private PictureBox igrac;
 		private int igracBrzina = 10;
@@ -28,13 +28,13 @@ namespace CatsDefenders
 			{
 				Image = Image.FromFile("C:/Users/Korisnik/Desktop/private/nebitno/veoma bitno/igrac.png"),
 				Size = new Size(50, 50),
-				Location = new Point(this.ClientSize.Width / 2, this.ClientSize.Height - 60),
+				Location = new Point(this.ClientSize.Width / 2 - 25, this.ClientSize.Height - 60), // Centriraj igrača
 				SizeMode = PictureBoxSizeMode.StretchImage
 			};
 
 			this.Controls.Add(igrac);
 
-			this.KeyDown += new KeyEventHandler(Form1_KeyDown);
+			this.KeyDown += new KeyEventHandler(MainForm_KeyDown);
 
 			gameTimer = new System.Windows.Forms.Timer();
 			gameTimer.Interval = 20;
@@ -42,7 +42,7 @@ namespace CatsDefenders
 			gameTimer.Start();
 		}
 
-		private void Form1_KeyDown(object sender, KeyEventArgs e)
+		private void MainForm_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.Left && igrac.Left > 0)
 			{
@@ -65,7 +65,7 @@ namespace CatsDefenders
 			PictureBox metak = new PictureBox
 			{
 				Size = new Size(5, 20),
-				Location = new Point(igrac.Left + igrac.Width / 2, igrac.Top),
+				Location = new Point(igrac.Left + igrac.Width / 2 - 2, igrac.Top), // Centriraj metak
 				BackColor = Color.Black
 			};
 			this.Controls.Add(metak);
