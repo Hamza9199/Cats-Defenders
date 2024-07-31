@@ -13,7 +13,7 @@ namespace CatsDefenders
 		private int meciBrzina = 10;
 		private System.Windows.Forms.Timer gameTimer;
 		private List<PictureBox> Nevzudin = new List<PictureBox>();
-		private int NevzuBrzina = 2;
+		private int NevzuBrzina = 1;
 		private System.Windows.Forms.Timer NevzoTimer;
 		private int bodovi = 0;
 		private Label bodoviLabel;
@@ -25,11 +25,19 @@ namespace CatsDefenders
 		private Label menuText;
 		private int zivoti = 5;
 		private Label zivotText;
+		private int nevze = 0;
 
 		public MainForm()
 		{
 			InitializeComponent();
 			PostaviIgru();
+			PostaviPozadinskuSliku();
+		}
+
+		private void PostaviPozadinskuSliku()
+		{
+			this.BackgroundImage = Image.FromFile("C:/Users/Korisnik/Desktop/private/pozadina.png");
+			this.BackgroundImageLayout = ImageLayout.Stretch;		
 		}
 
 		private void PostaviIgru()
@@ -86,7 +94,7 @@ namespace CatsDefenders
 			gameTimer.Start();
 
 			NevzoTimer = new System.Windows.Forms.Timer();
-			NevzoTimer.Interval = 1000;
+			NevzoTimer.Interval = 2000;
 			NevzoTimer.Tick += (sender, e) => DodajNevzu();
 			NevzoTimer.Start();
 
@@ -104,7 +112,7 @@ namespace CatsDefenders
 			{
 				Size = new Size(300, 200), 
 				Location = new Point((this.ClientSize.Width / 2) - 150, (this.ClientSize.Height / 2) - 100),
-				BackColor = Color.FromArgb(185,0,0,0), 
+				BackColor = Color.FromArgb(170,0,0,0), 
 				Visible = false
 			};
 
@@ -187,7 +195,7 @@ namespace CatsDefenders
 			{
 				Size = new Size(5, 10),
 				Location = new Point(igrac.Left + igrac.Width / 2 - 2, igrac.Top),
-				BackColor = Color.Black
+				BackColor = Color.White
 			};
 			this.Controls.Add(metak);
 			meci.Add(metak);
@@ -210,6 +218,24 @@ namespace CatsDefenders
 			{
 				PictureBox nevzo = Nevzudin[i];
 				nevzo.Top += NevzuBrzina;
+
+
+
+				if (nevze > 10)
+				{
+					NevzuBrzina = 2;
+				}
+				else if (nevze > 30)
+				{
+					NevzuBrzina = 3;
+				}
+				else if (nevze > 50)
+				{
+					NevzuBrzina = 4;
+				}
+				
+
+
 				if (nevzo.Top > this.ClientSize.Height)
 				{
 					this.Controls.Remove(nevzo);
@@ -217,6 +243,7 @@ namespace CatsDefenders
 					zivoti -= 1;
 					zivotText.Text = "Zivoti: " + zivoti;
 				}
+
 			}
 
 			if (zivoti == 0)
@@ -239,6 +266,7 @@ namespace CatsDefenders
 
 			this.Controls.Add(nevzo);
 			Nevzudin.Add(nevzo);
+			nevze++;
 		}
 
 		private void Sudar()
