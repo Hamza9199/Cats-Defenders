@@ -13,7 +13,7 @@ namespace CatsDefenders
 		private int meciBrzina = 15;
 		private System.Windows.Forms.Timer gameTimer;
 		private List<PictureBox> Nevzudin = new List<PictureBox>();
-		private int NevzuBrzina = 1;
+		private int NevzuBrzina = 1; 
 		private System.Windows.Forms.Timer NevzoTimer;
 		private int bodovi = 0;
 		private Label bodoviLabel;
@@ -26,6 +26,8 @@ namespace CatsDefenders
 		private int zivoti = 5;
 		private Label zivotText;
 		private int nevze = 0;
+		private Label level;
+		private int nevzeUbijeniCount = 0;
 
 		public MainForm()
 		{
@@ -49,7 +51,8 @@ namespace CatsDefenders
 			{
 				Text = "Bodovi: 0",
 				Location = new Point(10, 10),
-				ForeColor = Color.Black,
+				ForeColor = Color.White,
+				BackColor = Color.Transparent,
 				Font = new Font("Arial", 12, FontStyle.Bold),
 				AutoSize = true
 			};
@@ -58,20 +61,34 @@ namespace CatsDefenders
 			{
 				Text = "Menu",
 				Location = new Point(this.ClientSize.Width - 100, 10),
-				ForeColor = Color.Black,
+				ForeColor = Color.White,
+				BackColor = Color.Transparent,
 				Font = new Font("Arial", 12, FontStyle.Bold),
-				AutoSize = true
+				AutoSize = true,
+				Cursor = Cursors.Hand
 			};
 
 			zivotText = new Label
 			{
 				Text = "Zivoti: " + zivoti,
 				Location = new Point(10, 30),
-				ForeColor = Color.Black,
+				ForeColor = Color.White,
+				BackColor = Color.Transparent,
 				Font = new Font("Arial", 12, FontStyle.Bold),
 				AutoSize = true
 			};
 
+			level = new Label
+			{
+				Text = "Level: 1",
+				Location = new Point(10, 50),
+				ForeColor = Color.White,
+				BackColor = Color.Transparent,
+				Font = new Font("Arial", 12, FontStyle.Bold),
+				AutoSize = true
+			};
+
+			this.Controls.Add(level);
 			this.Controls.Add(zivotText);
 			this.Controls.Add(bodoviLabel);
 			this.Controls.Add(pauzirajIgru);
@@ -79,7 +96,7 @@ namespace CatsDefenders
 
 			igrac = new PictureBox
 			{
-				Image = Image.FromFile("C:/Users/Korisnik/Desktop/private/igrac.jpg"),
+				Image = Image.FromFile("C:/Users/Korisnik/Desktop/private/igrac.png"),
 				Size = new Size(50, 50),
 				Location = new Point(this.ClientSize.Width / 2 - 25, this.ClientSize.Height - 60),
 				SizeMode = PictureBoxSizeMode.StretchImage
@@ -99,7 +116,59 @@ namespace CatsDefenders
 			NevzoTimer.Start();
 
 			PostaviMenuPanel();
+
 		}
+
+		private void levelFollow()
+		{
+			switch (nevzeUbijeniCount)
+			{
+				case 10:
+					PromijeniLevel(2);
+					break;
+				case 31:
+					PromijeniLevel(3);
+					break;
+				case 52:
+					PromijeniLevel(4);
+					break;
+				case 73:
+					PromijeniLevel(5);
+					break;
+				case 94:
+					PromijeniLevel(6);
+					break;
+				case 115:
+					PromijeniLevel(7);
+					break;
+				case 136:
+					PromijeniLevel(8);
+					break;
+				case 157:
+					PromijeniLevel(9);
+					break;
+				case 178:
+					PromijeniLevel(10);
+					break;
+				default:
+					break;
+			}
+		}
+
+		private void PromijeniLevel(int noviLevel)
+		{
+			nevzeUbijeniCount++;
+			level.Text = "Level: " + noviLevel;
+			Nevzudin.Clear();
+			gameTimer.Stop();
+			NevzoTimer.Stop();
+
+			MenuPanel.Visible = true;
+			pauzirajIgru.Visible = false;
+
+			
+		}
+
 
 		private void UgasiLabel_Click(object sender, EventArgs e)
 		{
@@ -113,7 +182,8 @@ namespace CatsDefenders
 				Size = new Size(300, 200), 
 				Location = new Point((this.ClientSize.Width / 2) - 150, (this.ClientSize.Height / 2) - 100),
 				BackColor = Color.FromArgb(170,0,0,0), 
-				Visible = false
+				Visible = false,
+				AutoSize = true
 			};
 
 			menuText = new Label
@@ -205,6 +275,7 @@ namespace CatsDefenders
 		{
 			for (int i = meci.Count - 1; i >= 0; i--)
 			{
+
 				PictureBox metak = meci[i];
 				metak.Top -= meciBrzina;
 				if (metak.Top < 0)
@@ -252,13 +323,14 @@ namespace CatsDefenders
 			}
 
 			Sudar();
+			levelFollow();
 		}
 
 		private void DodajNevzu()
 		{
 			PictureBox nevzo = new PictureBox
 			{
-				Image = Image.FromFile("C:/Users/Korisnik/Desktop/private/nevzudin.jpg"),
+				Image = Image.FromFile("C:/Users/Korisnik/Desktop/private/nevzudin.png"),
 				Size = new Size(50, 50),
 				Location = new Point(new Random().Next(0, this.ClientSize.Width - 50), -50),
 				SizeMode = PictureBoxSizeMode.StretchImage
@@ -286,6 +358,7 @@ namespace CatsDefenders
 						this.Controls.Remove(metak);
 						meci.Remove(metak);
 						PovecajBodove();
+						nevzeUbijeniCount++;
 						break;
 					}
 				}
@@ -302,6 +375,7 @@ namespace CatsDefenders
 		{
 			bodovi += 1;
 			bodoviLabel.Text = "Bodovi: " + bodovi;
+
 		}
 
 		private void KrajIgre()
@@ -347,6 +421,7 @@ namespace CatsDefenders
 		private void MenuClick(object sender, EventArgs e)
 		{
 			nastaviIgru();
+			
 		}
 	}
 }

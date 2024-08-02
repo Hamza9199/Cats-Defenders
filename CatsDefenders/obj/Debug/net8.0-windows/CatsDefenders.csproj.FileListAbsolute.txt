@@ -3,7 +3,6 @@ C:\Users\Korisnik\Desktop\private\Cats-Defenders\CatsDefenders\bin\Debug\net8.0-
 C:\Users\Korisnik\Desktop\private\Cats-Defenders\CatsDefenders\bin\Debug\net8.0-windows\CatsDefenders.runtimeconfig.json
 C:\Users\Korisnik\Desktop\private\Cats-Defenders\CatsDefenders\bin\Debug\net8.0-windows\CatsDefenders.dll
 C:\Users\Korisnik\Desktop\private\Cats-Defenders\CatsDefenders\bin\Debug\net8.0-windows\CatsDefenders.pdb
-C:\Users\Korisnik\Desktop\private\Cats-Defenders\CatsDefenders\obj\Debug\net8.0-windows\CatsDefenders.Form1.resources
 C:\Users\Korisnik\Desktop\private\Cats-Defenders\CatsDefenders\obj\Debug\net8.0-windows\CatsDefenders.csproj.GenerateResource.cache
 C:\Users\Korisnik\Desktop\private\Cats-Defenders\CatsDefenders\obj\Debug\net8.0-windows\CatsDefenders.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Korisnik\Desktop\private\Cats-Defenders\CatsDefenders\obj\Debug\net8.0-windows\CatsDefenders.AssemblyInfoInputs.cache
@@ -15,3 +14,4 @@ C:\Users\Korisnik\Desktop\private\Cats-Defenders\CatsDefenders\obj\Debug\net8.0-
 C:\Users\Korisnik\Desktop\private\Cats-Defenders\CatsDefenders\obj\Debug\net8.0-windows\CatsDefenders.pdb
 C:\Users\Korisnik\Desktop\private\Cats-Defenders\CatsDefenders\obj\Debug\net8.0-windows\CatsDefenders.genruntimeconfig.cache
 C:\Users\Korisnik\Desktop\private\Cats-Defenders\CatsDefenders\obj\Debug\net8.0-windows\ref\CatsDefenders.dll
+C:\Users\Korisnik\Desktop\private\Cats-Defenders\CatsDefenders\obj\Debug\net8.0-windows\CatsDefenders.MainForm.resources

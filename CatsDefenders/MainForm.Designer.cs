@@ -19,6 +19,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 600);
 			this.Text = "Cats Defenders";
+			this.Icon = new System.Drawing.Icon("C:/Users/Korisnik/Desktop/private/ikona.ico");
 		}
 	}
 }
