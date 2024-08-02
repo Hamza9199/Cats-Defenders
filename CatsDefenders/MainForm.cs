@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using NAudio.Wave;
+using System.IO;
 using System.Media;
 
 
@@ -14,9 +16,9 @@ namespace CatsDefenders
 		private List<PictureBox> meci = new List<PictureBox>();
 		private int meciBrzina = 15;
 		private System.Windows.Forms.Timer gameTimer;
-		private List<PictureBox> Nevzudin = new List<PictureBox>();
-		private int NevzuBrzina = 1; 
-		private System.Windows.Forms.Timer NevzoTimer;
+		private List<PictureBox> Neprijatelj = new List<PictureBox>();
+		private int NeprijateljBrzina = 1; 
+		private System.Windows.Forms.Timer NeprijateljTimer;
 		private int bodovi = 0;
 		private Label bodoviLabel;
 		private Label pauzirajIgru;
@@ -27,24 +29,27 @@ namespace CatsDefenders
 		private Label menuText;
 		private int zivoti = 5;
 		private Label zivotText;
-		private int nevze = 0;
+		private int neprijatelji = 0;
 		private Label level;
-		private int nevzeUbijeniCount = 0;
-		private SoundPlayer pucanjZvuk;
-		private SoundPlayer eksplozijaZvuk;
-		private SoundPlayer pozadinaMuzika;
+		private int neprijateljUbijeniCount = 0;
+		private WaveOutEvent pucanjZvuk;
+		private WaveOutEvent eksplozijaZvuk;
+		private WaveOutEvent pozadinaMuzika;
+		private WaveOutEvent mrtavZvuk;
 
+		private string basePath = AppDomain.CurrentDomain.BaseDirectory;
 
 		public MainForm()
 		{
 			InitializeComponent();
 			PostaviIgru();
 			PostaviPozadinskuSliku();
+
 		}
 
 		private void PostaviPozadinskuSliku()
 		{
-			this.BackgroundImage = Image.FromFile("C:/Users/Korisnik/Desktop/private/pozadina.png");
+			this.BackgroundImage = Image.FromFile(Path.Combine(basePath, "pozadina.png")); 
 			this.BackgroundImageLayout = ImageLayout.Stretch;		
 		}
 
@@ -102,7 +107,7 @@ namespace CatsDefenders
 
 			igrac = new PictureBox
 			{
-				Image = Image.FromFile("C:/Users/Korisnik/Desktop/private/igrac.png"),
+				Image = Image.FromFile(Path.Combine(basePath, "igrac.png")),
 				Size = new Size(50, 50),
 				Location = new Point(this.ClientSize.Width / 2 - 25, this.ClientSize.Height - 60),
 				SizeMode = PictureBoxSizeMode.StretchImage
@@ -116,17 +121,28 @@ namespace CatsDefenders
 			gameTimer.Tick += new EventHandler(GameTimer_Tick);
 			gameTimer.Start();
 
-			NevzoTimer = new System.Windows.Forms.Timer();
-			NevzoTimer.Interval = 2000;
-			NevzoTimer.Tick += (sender, e) => DodajNevzu();
-			NevzoTimer.Start();
+			NeprijateljTimer = new System.Windows.Forms.Timer();
+			NeprijateljTimer.Interval = 2000;
+			NeprijateljTimer.Tick += (sender, e) => DodajNevzu();
+			NeprijateljTimer.Start();
 
 
-			pucanjZvuk = new SoundPlayer("C:/Users/Korisnik/Desktop/private/pucanj.wav");
-			eksplozijaZvuk = new SoundPlayer("C:/Users/Korisnik/Desktop/private/eksplozija.wav");
-			pozadinaMuzika = new SoundPlayer("C:/Users/Korisnik/Desktop/private/pozadina.wav");
+			pucanjZvuk = new WaveOutEvent();
+			eksplozijaZvuk = new WaveOutEvent();
+			pozadinaMuzika = new WaveOutEvent();
+			mrtavZvuk = new WaveOutEvent();
 
-			pozadinaMuzika.PlayLooping();
+			pucanjZvuk.Init(new AudioFileReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "pucanj.wav")));
+			eksplozijaZvuk.Init(new AudioFileReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "eksplozija.wav")));
+			pozadinaMuzika.Init(new AudioFileReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "pozadina.wav")));
+			mrtavZvuk.Init(new AudioFileReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mrtav.wav")));
+
+
+
+			pozadinaMuzika.Volume = 0.5f;
+			pozadinaMuzika.PlaybackStopped += (s, e) => pozadinaMuzika.Play();
+
+			pozadinaMuzika.Play();
 
 
 			PostaviMenuPanel();
@@ -135,7 +151,7 @@ namespace CatsDefenders
 
 		private void levelFollow()
 		{
-			switch (nevzeUbijeniCount)
+			switch (neprijateljUbijeniCount)
 			{
 				case 10:
 					PromijeniLevel(2);
@@ -171,11 +187,11 @@ namespace CatsDefenders
 
 		private void PromijeniLevel(int noviLevel)
 		{
-			nevzeUbijeniCount++;
+			neprijateljUbijeniCount++;
 			level.Text = "Level: " + noviLevel;
-			Nevzudin.Clear();
+			Neprijatelj.Clear();
 			gameTimer.Stop();
-			NevzoTimer.Stop();
+			NeprijateljTimer.Stop();
 
 			MenuPanel.Visible = true;
 			pauzirajIgru.Visible = false;
@@ -258,6 +274,7 @@ namespace CatsDefenders
 			if (e.KeyCode == Keys.Space)
 			{
 				Pucaj();
+				IgrajZvuk(Path.Combine(basePath, "pucanj.wav"));
 			}
 
 			if (e.KeyCode == Keys.Escape)
@@ -283,7 +300,9 @@ namespace CatsDefenders
 			};
 			this.Controls.Add(metak);
 			meci.Add(metak);
-			pucanjZvuk.Play();
+
+
+
 
 		}
 
@@ -301,24 +320,24 @@ namespace CatsDefenders
 				}
 			}
 
-			for (int i = Nevzudin.Count - 1; i >= 0; i--)
+			for (int i = Neprijatelj.Count - 1; i >= 0; i--)
 			{
-				PictureBox nevzo = Nevzudin[i];
-				nevzo.Top += NevzuBrzina;
+				PictureBox nevzo = Neprijatelj[i];
+				nevzo.Top += NeprijateljBrzina;
 
 
 
-				if (nevze > 10)
+				if (neprijatelji > 10)
 				{
-					NevzuBrzina = 2;
+					NeprijateljBrzina = 2;
 				}
-				else if (nevze > 30)
+				else if (neprijatelji > 30)
 				{
-					NevzuBrzina = 3;
+					NeprijateljBrzina = 3;
 				}
-				else if (nevze > 50)
+				else if (neprijatelji > 50)
 				{
-					NevzuBrzina = 4;
+					NeprijateljBrzina = 4;
 				}
 				
 
@@ -326,7 +345,7 @@ namespace CatsDefenders
 				if (nevzo.Top > this.ClientSize.Height)
 				{
 					this.Controls.Remove(nevzo);
-					Nevzudin.Remove(nevzo);
+					Neprijatelj.Remove(nevzo);
 					zivoti -= 1;
 					zivotText.Text = "Zivoti: " + zivoti;
 				}
@@ -340,48 +359,54 @@ namespace CatsDefenders
 
 			Sudar();
 			levelFollow();
+
 		}
 
 		private void DodajNevzu()
 		{
-			PictureBox nevzo = new PictureBox
+			PictureBox neprijatelj = new PictureBox
 			{
-				Image = Image.FromFile("C:/Users/Korisnik/Desktop/private/nevzudin.png"),
+				Image = Image.FromFile(Path.Combine(basePath, "neprijatelj.png")),
 				Size = new Size(50, 50),
 				Location = new Point(new Random().Next(0, this.ClientSize.Width - 50), -50),
 				SizeMode = PictureBoxSizeMode.StretchImage
 			};
 
-			this.Controls.Add(nevzo);
-			Nevzudin.Add(nevzo);
-			nevze++;
+			this.Controls.Add(neprijatelj);
+			Neprijatelj.Add(neprijatelj);
+			neprijatelji++;
 		}
 
 		private void Sudar()
 		{
-			for (int i = Nevzudin.Count - 1; i >= 0; i--)
+			for (int i = Neprijatelj.Count - 1; i >= 0; i--)
 			{
-				PictureBox nevzo = Nevzudin[i];
+				PictureBox neprijatelj = Neprijatelj[i];
 
 				for (int j = meci.Count - 1; j >= 0; j--)
 				{
 					PictureBox metak = meci[j];
 
-					if (nevzo.Bounds.IntersectsWith(metak.Bounds))
+					if (neprijatelj.Bounds.IntersectsWith(metak.Bounds))
 					{
-						this.Controls.Remove(nevzo);
-						Nevzudin.Remove(nevzo);
+						this.Controls.Remove(neprijatelj);
+						Neprijatelj.Remove(neprijatelj);
 						this.Controls.Remove(metak);
 						meci.Remove(metak);
 						PovecajBodove();
-						nevzeUbijeniCount++;
-						eksplozijaZvuk.Play();
+						neprijateljUbijeniCount++;
+
+						IgrajZvuk(Path.Combine(basePath, "eksplozija.wav"));
+
 						break;
 					}
 				}
 
-				if (nevzo.Bounds.IntersectsWith(igrac.Bounds))
+				if (neprijatelj.Bounds.IntersectsWith(igrac.Bounds))
 				{
+
+					
+
 					KrajIgre();
 				}
 
@@ -398,7 +423,9 @@ namespace CatsDefenders
 		private void KrajIgre()
 		{
 			gameTimer.Stop();
-			NevzoTimer.Stop();
+			NeprijateljTimer.Stop();
+			pozadinaMuzika.Stop();
+			mrtavZvuk.Play();
 			MessageBox.Show("Izgubili ste! Osvojili ste " + bodovi + " bodova.");
 			Application.Restart();
 		}
@@ -406,20 +433,36 @@ namespace CatsDefenders
 		private void pauzirajIgruFunkcija()
 		{
 			gameTimer.Stop();
-			NevzoTimer.Stop();
+			NeprijateljTimer.Stop();
 			PauzirajIgru = true;
 			MenuPanel.Visible = true;
 			pauzirajIgru.Visible = false;
+			pozadinaMuzika.Pause();
 		}
 
 
 		private void nastaviIgru()
 		{
 			gameTimer.Start();
-			NevzoTimer.Start();
+			NeprijateljTimer.Start();
 			PauzirajIgru = false;
 			MenuPanel.Visible = false;
 			pauzirajIgru.Visible = true;
+			pozadinaMuzika.Play();
+		}
+
+		private void IgrajZvuk(string putanja)
+		{
+			using (var zvuk = new WaveOutEvent())
+			using (var audioReader = new AudioFileReader(putanja))
+			{
+				zvuk.Init(audioReader);
+				zvuk.Play();
+				while (zvuk.PlaybackState == PlaybackState.Playing)
+				{
+					Application.DoEvents();
+				}
+			}
 		}
 
 
