@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Media;
+
 
 namespace CatsDefenders
 {
@@ -28,6 +30,10 @@ namespace CatsDefenders
 		private int nevze = 0;
 		private Label level;
 		private int nevzeUbijeniCount = 0;
+		private SoundPlayer pucanjZvuk;
+		private SoundPlayer eksplozijaZvuk;
+		private SoundPlayer pozadinaMuzika;
+
 
 		public MainForm()
 		{
@@ -114,6 +120,14 @@ namespace CatsDefenders
 			NevzoTimer.Interval = 2000;
 			NevzoTimer.Tick += (sender, e) => DodajNevzu();
 			NevzoTimer.Start();
+
+
+			pucanjZvuk = new SoundPlayer("C:/Users/Korisnik/Desktop/private/pucanj.wav");
+			eksplozijaZvuk = new SoundPlayer("C:/Users/Korisnik/Desktop/private/eksplozija.wav");
+			pozadinaMuzika = new SoundPlayer("C:/Users/Korisnik/Desktop/private/pozadina.wav");
+
+			pozadinaMuzika.PlayLooping();
+
 
 			PostaviMenuPanel();
 
@@ -269,6 +283,8 @@ namespace CatsDefenders
 			};
 			this.Controls.Add(metak);
 			meci.Add(metak);
+			pucanjZvuk.Play();
+
 		}
 
 		private void GameTimer_Tick(object sender, EventArgs e)
@@ -359,6 +375,7 @@ namespace CatsDefenders
 						meci.Remove(metak);
 						PovecajBodove();
 						nevzeUbijeniCount++;
+						eksplozijaZvuk.Play();
 						break;
 					}
 				}
