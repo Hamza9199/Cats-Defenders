@@ -382,7 +382,7 @@ namespace CatsDefenders
 			this.Controls.Add(metak);
 			meci.Add(metak);
 
-
+			
 
 
 		}
@@ -437,6 +437,13 @@ namespace CatsDefenders
 			{
 				KrajIgre();
 			}
+
+			if (pozadinaMuzika.PlaybackState == PlaybackState.Stopped)
+			{
+				pozadinaMuzika.Init(new AudioFileReader(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "pozadina.wav")));
+				pozadinaMuzika.Play();
+			}
+
 
 			Sudar();
 			levelFollow();
