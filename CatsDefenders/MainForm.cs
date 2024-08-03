@@ -25,17 +25,23 @@ namespace CatsDefenders
 		private bool PauzirajIgru = false;
 		private Panel MenuPanel;
 		private Label nastaviLabel;
+		private Label nastaviLabel2;
 		private Label ugasiLabel;
+		private Label ugasiLabel2;
 		private Label menuText;
+		private Label menuText2;
 		private int zivoti = 5;
 		private Label zivotText;
 		private int neprijatelji = 0;
 		private Label level;
+		private int levelN = 1;
 		private int neprijateljUbijeniCount = 0;
 		private WaveOutEvent pucanjZvuk;
 		private WaveOutEvent eksplozijaZvuk;
 		private WaveOutEvent pozadinaMuzika;
 		private WaveOutEvent mrtavZvuk;
+		private Panel LevelUP;
+		
 
 		private string basePath = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -44,6 +50,7 @@ namespace CatsDefenders
 			InitializeComponent();
 			PostaviIgru();
 			PostaviPozadinskuSliku();
+
 
 		}
 
@@ -56,7 +63,11 @@ namespace CatsDefenders
 		private void PostaviIgru()
 		{
 			this.Text = "Cats Defenders";
-			this.ClientSize = new Size(800, 600);
+			//this.ClientSize = new Size(1360, 768);
+			this.FormBorderStyle = FormBorderStyle.None; 
+			this.WindowState = FormWindowState.Maximized; 
+			this.Bounds = Screen.PrimaryScreen.Bounds;
+
 
 			bodoviLabel = new Label
 			{
@@ -107,7 +118,7 @@ namespace CatsDefenders
 
 			igrac = new PictureBox
 			{
-				Image = Image.FromFile(Path.Combine(basePath, "igrac.png")),
+				Image = Image.FromFile(Path.Combine(basePath, "igrac.gif")),
 				Size = new Size(50, 50),
 				Location = new Point(this.ClientSize.Width / 2 - 25, this.ClientSize.Height - 60),
 				SizeMode = PictureBoxSizeMode.StretchImage
@@ -146,6 +157,7 @@ namespace CatsDefenders
 
 
 			PostaviMenuPanel();
+			PostaviLevelUpPanel();
 
 		}
 
@@ -155,6 +167,7 @@ namespace CatsDefenders
 			{
 				case 10:
 					PromijeniLevel(2);
+
 					break;
 				case 31:
 					PromijeniLevel(3);
@@ -189,14 +202,24 @@ namespace CatsDefenders
 		{
 			neprijateljUbijeniCount++;
 			level.Text = "Level: " + noviLevel;
-			Neprijatelj.Clear();
 			gameTimer.Stop();
 			NeprijateljTimer.Stop();
 
-			MenuPanel.Visible = true;
+
+			for (int i = Neprijatelj.Count - 1; i >= 0; i--)
+			{
+				this.Controls.Remove(Neprijatelj[i]);
+				Neprijatelj[i].Dispose();  
+			}
+
+			Neprijatelj.Clear();
+
+
+
+			LevelUP.Visible = true;
 			pauzirajIgru.Visible = false;
 
-			
+			levelN++;
 		}
 
 
@@ -258,6 +281,60 @@ namespace CatsDefenders
 			this.Controls.Add(MenuPanel);
 		}
 
+		private void PostaviLevelUpPanel()
+		{
+			LevelUP = new Panel
+			{
+				Size = new Size(300, 200),
+				Location = new Point((this.ClientSize.Width / 2) - 150, (this.ClientSize.Height / 2) - 100),
+				BackColor = Color.FromArgb(170, 0, 0, 0),
+				Visible = false,
+				AutoSize = true
+			};
+
+			menuText2 = new Label
+			{
+				Text = "Cats Defenders",
+				Location = new Point(42, 10),
+				ForeColor = Color.White,
+				BackColor = Color.Transparent,
+				Font = new Font("Arial", 20, FontStyle.Bold),
+				AutoSize = true,
+
+			};
+
+			nastaviLabel2 = new Label
+			{
+				Text = "Sljedeći level",
+				Location = new Point(50, 60),
+				ForeColor = Color.White,
+				Font = new Font("Arial", 16, FontStyle.Bold),
+				AutoSize = true,
+				BackColor = Color.Transparent,
+				Cursor = Cursors.Hand
+			};
+
+			ugasiLabel2 = new Label
+			{
+				Text = "Završi igru",
+				Location = new Point(50, 80),
+				ForeColor = Color.White,
+				Font = new Font("Arial", 16, FontStyle.Bold),
+				AutoSize = true,
+				BackColor = Color.Transparent,
+				Cursor = Cursors.Hand
+			};
+
+			nastaviLabel2.Click += new EventHandler(MenuClick);
+			ugasiLabel2.Click += new EventHandler(UgasiLabel_Click);
+
+			LevelUP.Controls.Add(menuText2);
+			LevelUP.Controls.Add(nastaviLabel2);
+			LevelUP.Controls.Add(ugasiLabel2);
+			this.Controls.Add(LevelUP);
+
+		}
+
 
 		private void MainForm_KeyDown(object sender, KeyEventArgs e)
 		{
@@ -276,17 +353,21 @@ namespace CatsDefenders
 				Pucaj();
 				IgrajZvuk(Path.Combine(basePath, "pucanj.wav"));
 			}
-
+			
 			if (e.KeyCode == Keys.Escape)
 			{
-				if (PauzirajIgru)
+				if (LevelUP.Visible == false)
 				{
-					nastaviIgru();
+					if (PauzirajIgru)
+					{
+						nastaviIgru();
+					}
+					else
+					{
+						pauzirajIgruFunkcija();
+					}
 				}
-				else
-				{
-					pauzirajIgruFunkcija();
-				}
+				
 			}
 		}
 
@@ -327,15 +408,15 @@ namespace CatsDefenders
 
 
 
-				if (neprijatelji > 10)
+				if (levelN == 3)
 				{
 					NeprijateljBrzina = 2;
 				}
-				else if (neprijatelji > 30)
+				else if (levelN == 6)
 				{
 					NeprijateljBrzina = 3;
 				}
-				else if (neprijatelji > 50)
+				else if (levelN == 10)
 				{
 					NeprijateljBrzina = 4;
 				}
@@ -366,10 +447,11 @@ namespace CatsDefenders
 		{
 			PictureBox neprijatelj = new PictureBox
 			{
-				Image = Image.FromFile(Path.Combine(basePath, "neprijatelj.png")),
+				Image = Image.FromFile(Path.Combine(basePath, "neprijatelj.gif")),
 				Size = new Size(50, 50),
 				Location = new Point(new Random().Next(0, this.ClientSize.Width - 50), -50),
 				SizeMode = PictureBoxSizeMode.StretchImage
+			
 			};
 
 			this.Controls.Add(neprijatelj);
@@ -381,37 +463,41 @@ namespace CatsDefenders
 		{
 			for (int i = Neprijatelj.Count - 1; i >= 0; i--)
 			{
-				PictureBox neprijatelj = Neprijatelj[i];
-
-				for (int j = meci.Count - 1; j >= 0; j--)
+				if (i < Neprijatelj.Count)
 				{
-					PictureBox metak = meci[j];
+					PictureBox neprijatelj = Neprijatelj[i];
 
-					if (neprijatelj.Bounds.IntersectsWith(metak.Bounds))
+					for (int j = meci.Count - 1; j >= 0; j--)
 					{
-						this.Controls.Remove(neprijatelj);
-						Neprijatelj.Remove(neprijatelj);
-						this.Controls.Remove(metak);
-						meci.Remove(metak);
-						PovecajBodove();
-						neprijateljUbijeniCount++;
+						if (j < meci.Count) 
+						{
+							PictureBox metak = meci[j];
 
-						IgrajZvuk(Path.Combine(basePath, "eksplozija.wav"));
+							if (neprijatelj.Bounds.IntersectsWith(metak.Bounds))
+							{
+								this.Controls.Remove(neprijatelj);
+								Neprijatelj.Remove(neprijatelj);
+								this.Controls.Remove(metak);
+								meci.Remove(metak);
+								PovecajBodove();
+								neprijateljUbijeniCount++;
 
-						break;
+								IgrajZvuk(Path.Combine(basePath, "eksplozija.wav"));
+
+								break;
+							}
+						}
+					}
+
+					if (neprijatelj.Bounds.IntersectsWith(igrac.Bounds))
+					{
+						pozadinaMuzika.Stop();
+						KrajIgre();
 					}
 				}
-
-				if (neprijatelj.Bounds.IntersectsWith(igrac.Bounds))
-				{
-
-					
-
-					KrajIgre();
-				}
-
 			}
 		}
+
 
 		private void PovecajBodove()
 		{
@@ -447,6 +533,7 @@ namespace CatsDefenders
 			NeprijateljTimer.Start();
 			PauzirajIgru = false;
 			MenuPanel.Visible = false;
+			LevelUP.Visible = false;
 			pauzirajIgru.Visible = true;
 			pozadinaMuzika.Play();
 		}
