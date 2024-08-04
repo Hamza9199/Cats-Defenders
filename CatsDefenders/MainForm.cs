@@ -171,6 +171,12 @@ namespace CatsDefenders
 					zivoti -= 1;
 					zivotText.Text = "Zivoti: " + zivoti;
 				}
+
+				if(neprijateljUbijeniCount == 210)
+				{
+					MessageBox.Show("Pobjedili ste! Osvojili ste " + bodovi + " bodova.");
+					Application.Restart();
+				}
 			}
 
 			// Provjera kraja igre
