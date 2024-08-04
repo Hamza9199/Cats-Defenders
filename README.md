@@ -20,7 +20,7 @@ Cats Defenders is an exciting Space Invaders-style game developed in C# using Wi
 
       Open the CatsDefenders.sln file in Visual Studio.
 
-3. **Set Up Image Paths**
+3. **Set Up Image Paths (optional)**
    
       Ensure the image paths (player.png, enemy.png) are correctly set in the code. You may need to adjust paths based on your local environment.
 
