@@ -14,7 +14,7 @@ Cats Defenders is an exciting Space Invaders-style game developed in C# using Wi
 1. **Clone the Repository**
 
    ```sh
-   git clone https://github.com/username/CatsDefenders.git
+   git clone https://github.com/Hamza9199/Cats-Defenders
 
 2. **Open the Project in Visual Studio**
 
