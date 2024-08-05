@@ -12,7 +12,7 @@ namespace CatsDefenders
 			form.MenuPanel = new Panel
 			{
 				Size = new Size(300, 200),
-				Location = new Point((form.ClientSize.Width - 200) / 2, (form.ClientSize.Height - 300) / 2),
+				Location = new Point((form.ClientSize.Width - 300) / 2, (form.ClientSize.Height - 200) / 2),
 				BackColor = Color.Black,
 				Visible = false
 			};
@@ -23,7 +23,7 @@ namespace CatsDefenders
 				ForeColor = Color.White,
 				Font = new Font("Arial", 16, FontStyle.Bold),
 				AutoSize = true,
-				Location = new Point(60, 60)
+				Location = new Point(60, 30)
 			};
 
 			form.nastaviLabel = new Label
@@ -32,7 +32,7 @@ namespace CatsDefenders
 				ForeColor = Color.White,
 				Font = new Font("Arial", 14, FontStyle.Bold),
 				AutoSize = true,
-				Location = new Point(70, 103),
+				Location = new Point(70, 80),
 				Cursor = Cursors.Hand
 			};
 
@@ -42,18 +42,17 @@ namespace CatsDefenders
 				ForeColor = Color.White,
 				Font = new Font("Arial", 14, FontStyle.Bold),
 				AutoSize = true,
-				Location = new Point(70, 130),
+				Location = new Point(70, 110),
 				Cursor = Cursors.Hand
 			};
 
 			form.MenuPanel.Controls.Add(form.menuText);
 			form.MenuPanel.Controls.Add(form.nastaviLabel);
 			form.MenuPanel.Controls.Add(form.ugasiLabel);
-
 			form.Controls.Add(form.MenuPanel);
 
-			form.nastaviLabel.Click += new EventHandler(form.MenuClick);
-			form.ugasiLabel.Click += new EventHandler(form.UgasiLabel_Click);
+			form.nastaviLabel.Click += form.MenuClick;
+			form.ugasiLabel.Click += form.UgasiLabel_Click;
 		}
 
 		// Postavlja panel za obavještenje o napretku na novi nivo
@@ -62,7 +61,7 @@ namespace CatsDefenders
 			form.LevelUP = new Panel
 			{
 				Size = new Size(300, 200),
-				Location = new Point((form.ClientSize.Width - 200) / 2, (form.ClientSize.Height - 200) / 2),
+				Location = new Point((form.ClientSize.Width - 300) / 2, (form.ClientSize.Height - 200) / 2),
 				BackColor = Color.Black,
 				Visible = false
 			};
@@ -86,16 +85,11 @@ namespace CatsDefenders
 				Cursor = Cursors.Hand
 			};
 
-
-
-			form.LevelUP.Controls.Add(label);
-
-			label.Click += new EventHandler(form.MenuClick);
-
-			form.MainForm_KeyDown(label, new KeyEventArgs(Keys.Enter));
-
 			form.LevelUP.Controls.Add(levelUpText);
+			form.LevelUP.Controls.Add(label);
 			form.Controls.Add(form.LevelUP);
+
+			label.Click += form.MenuClick;
 		}
 	}
 }

@@ -16,49 +16,18 @@ namespace CatsDefenders
 			form.Bounds = Screen.PrimaryScreen.Bounds;
 
 			// Postavlja labelu za bodove
-			form.bodoviLabel = new Label
-			{
-				Text = "Bodovi: 0",
-				Location = new Point(10, 10),
-				ForeColor = Color.White,
-				BackColor = Color.Transparent,
-				Font = new Font("Arial", 12, FontStyle.Bold),
-				AutoSize = true
-			};
+			form.bodoviLabel = KreirajLabelu("Bodovi: 0", new Point(10, 10));
 
 			// Postavlja labelu za pauziranje igre
-			form.pauzirajIgru = new Label
-			{
-				Text = "Menu",
-				Location = new Point(form.ClientSize.Width - 100, 10),
-				ForeColor = Color.White,
-				BackColor = Color.Transparent,
-				Font = new Font("Arial", 12, FontStyle.Bold),
-				AutoSize = true,
-				Cursor = Cursors.Hand
-			};
+			form.pauzirajIgru = KreirajLabelu("Menu", new Point(form.ClientSize.Width - 100, 10));
+			form.pauzirajIgru.Cursor = Cursors.Hand;
+			form.pauzirajIgru.Click += new EventHandler(form.PauzaClick);
 
 			// Postavlja labelu za prikaz broja života
-			form.zivotText = new Label
-			{
-				Text = "Zivoti: 5",
-				Location = new Point(600, 10),
-				ForeColor = Color.White,
-				BackColor = Color.Transparent,
-				Font = new Font("Arial", 12, FontStyle.Bold),
-				AutoSize = true
-			};
+			form.zivotText = KreirajLabelu("Životi: 5", new Point(600, 10));
 
 			// Postavlja labelu za prikaz trenutnog levela
-			form.level = new Label
-			{
-				Text = "Level: 1",
-				Location = new Point(10, 30),
-				ForeColor = Color.White,
-				BackColor = Color.Transparent,
-				Font = new Font("Arial", 12, FontStyle.Bold),
-				AutoSize = true
-			};
+			form.level = KreirajLabelu("Level: 1", new Point(10, 30));
 
 			// Dodavanje labela na formu
 			form.Controls.Add(form.level);
@@ -66,18 +35,14 @@ namespace CatsDefenders
 			form.Controls.Add(form.pauzirajIgru);
 			form.Controls.Add(form.bodoviLabel);
 
-			// Event handler za pauziranje igre
-			form.pauzirajIgru.Click += new EventHandler(form.PauzaClick);
-
 			// Postavljanje slike igrača
 			form.igrac = new PictureBox
 			{
 				Size = new Size(50, 50),
-				Location = new Point(form.ClientSize.Width / 2, form.ClientSize.Height - 60),
+				Location = new Point(form.ClientSize.Width / 2 - 25, form.ClientSize.Height - 60),
 				SizeMode = PictureBoxSizeMode.StretchImage,
-				Image = Image.FromFile(Path.Combine(form.basePath, "igrac.gif"))
+				Image = Image.FromFile(Path.Combine(form.basePath, "igrac.png"))
 			};
-
 			form.Controls.Add(form.igrac);
 
 			// Postavljanje timera za igru
@@ -85,7 +50,6 @@ namespace CatsDefenders
 			{
 				Interval = 20,
 			};
-
 			form.gameTimer.Tick += new EventHandler(form.GameTimer_Tick);
 			form.gameTimer.Start();
 
@@ -94,9 +58,21 @@ namespace CatsDefenders
 			{
 				Interval = 2500,
 			};
-
-			form.NeprijateljTimer.Tick += new EventHandler((sender, e) => form.DodajNevzu());
+			form.NeprijateljTimer.Tick += (sender, e) => form.DodajNevzu();
 			form.NeprijateljTimer.Start();
+		}
+
+		private static Label KreirajLabelu(string tekst, Point lokacija)
+		{
+			return new Label
+			{
+				Text = tekst,
+				Location = lokacija,
+				ForeColor = Color.White,
+				BackColor = Color.Transparent,
+				Font = new Font("Arial", 12, FontStyle.Bold),
+				AutoSize = true
+			};
 		}
 
 		// Postavlja pozadinsku sliku igre

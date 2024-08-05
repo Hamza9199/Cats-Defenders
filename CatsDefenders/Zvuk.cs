@@ -9,42 +9,55 @@ namespace CatsDefenders
 		// Inicijalizira zvukove za igru
 		public static void InicijalizirajZvukove(MainForm form)
 		{
-			form.pucanjZvuk = new WaveOutEvent();
-			form.eksplozijaZvuk = new WaveOutEvent();
-			form.pozadinaMuzika = new WaveOutEvent();
-			form.mrtavZvuk = new WaveOutEvent();
+			try
+			{
+				form.pucanjZvuk = new WaveOutEvent();
+				form.eksplozijaZvuk = new WaveOutEvent();
+				form.pozadinaMuzika = new WaveOutEvent();
+				form.mrtavZvuk = new WaveOutEvent();
 
-			// Postavljanje i pokretanje pozadinske muzike
-			form.pozadinaMuzika.Init(new AudioFileReader(Path.Combine(form.basePath, "pozadina.wav")));
-			form.pozadinaMuzika.Play();
+				// Postavljanje i pokretanje pozadinske muzike
+				var pozadinaPutanja = Path.Combine(form.basePath, "pozadina.wav");
+				form.pozadinaMuzika.Init(new AudioFileReader(pozadinaPutanja));
+				form.pozadinaMuzika.Play();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"Greška prilikom inicijalizacije zvukova: {ex.Message}");
+			}
 		}
 
+		// Pusti zvuk eksplozije
 		public static void PustiZvukEksplozije(string basePath)
 		{
-			using (var eksplozijaZvuk = new WaveOutEvent())
-			{
-				eksplozijaZvuk.Init(new AudioFileReader(Path.Combine(basePath, "eksplozija.wav")));
-				eksplozijaZvuk.Play();
-				while (eksplozijaZvuk.PlaybackState == PlaybackState.Playing)
-				{
-					Application.DoEvents();
-				}
-			}
+			PustiZvuk(Path.Combine(basePath, "eksplozija.wav"));
 		}
 
 		// Pokreće zvuk za određeni fajl
 		public static void IgrajZvuk(string path)
 		{
-			using (var pucanjZvuk = new WaveOutEvent())
-			{
-				pucanjZvuk.Init(new AudioFileReader(path));
-				pucanjZvuk.Play();
-				while (pucanjZvuk.PlaybackState == PlaybackState.Playing)
-				{
-					Application.DoEvents(); 
-				}
-			}
+			PustiZvuk(path);
 		}
 
+		// Privatna metoda za puštanje zvuka
+		private static void PustiZvuk(string path)
+		{
+			try
+			{
+				using (var zvuk = new WaveOutEvent())
+				{
+					zvuk.Init(new AudioFileReader(path));
+					zvuk.Play();
+					while (zvuk.PlaybackState == PlaybackState.Playing)
+					{
+						Application.DoEvents();
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"Greška prilikom puštanja zvuka: {ex.Message}");
+			}
+		}
 	}
 }
