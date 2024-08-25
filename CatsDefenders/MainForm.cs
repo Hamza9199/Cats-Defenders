@@ -13,7 +13,7 @@ namespace CatsDefenders
 		public PictureBox igrac;
 		public int igracBrzina = 40;
 		public List<PictureBox> meci = new List<PictureBox>();
-		public int meciBrzina = 20;
+		public int meciBrzina = 40;
 		public System.Windows.Forms.Timer gameTimer;
 		public List<PictureBox> Neprijatelj = new List<PictureBox>();
 		public int neprijateljBrzina = 1;
@@ -36,7 +36,9 @@ namespace CatsDefenders
 		public WaveOutEvent pozadinaMuzika;
 		public WaveOutEvent mrtavZvuk;
 		public Panel LevelUP;
-		public string basePath = AppDomain.CurrentDomain.BaseDirectory;
+        public Boss boss = null;
+
+        public string basePath = AppDomain.CurrentDomain.BaseDirectory;
 
 		public MainForm()
 		{
@@ -82,7 +84,7 @@ namespace CatsDefenders
 			{
 				PictureBox metak = new PictureBox
 				{
-					Size = new Size(18, 50),
+					Size = new Size(5, 10),
 					Location = new Point(igrac.Left + igrac.Width / 2 - 2, igrac.Top),
 					BackColor = Color.White
 				};
@@ -102,7 +104,32 @@ namespace CatsDefenders
 			CheckBackgroundMusic();
 			Neprijatelji.ProvjeriSudare(this);
 			levelFollow();
-		}
+
+
+            // Pojava Bossa na trećem nivou
+            if (levelN == 3 && boss == null)
+            {
+                boss = new Boss(this);
+            }
+
+            // Ako je Boss prisutan, kontroliraj njegovo kretanje
+            if (boss != null)
+            {
+                boss.Kretanje(this);
+
+                // Provjera sudara metka sa Bossom
+                for (int i = meci.Count - 1; i >= 0; i--)
+                {
+                    PictureBox metak = meci[i];
+                    if (metak.Bounds.IntersectsWith(boss.BossPictureBox.Bounds))
+                    {
+                        this.Controls.Remove(metak);
+                        meci.Remove(metak);
+                        boss.PrimiStetu(this);
+                    }
+                }
+            }
+        }
 
 		public void MoveMeci()
 		{
@@ -200,8 +227,11 @@ namespace CatsDefenders
 			gameTimer.Stop();
 			NeprijateljTimer.Stop();
 			ClearEnemies();
-			LevelUP.Visible = true;
-			pauzirajIgru.Visible = false;
+            if (noviLevel != 3 || boss == null) // Boss se kreira samo jednom na trećem nivou
+            {
+                LevelUP.Visible = true;
+            }
+            pauzirajIgru.Visible = false;
 			levelN++;
 		}
 
