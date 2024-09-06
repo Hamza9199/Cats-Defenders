@@ -245,7 +245,7 @@ namespace CatsDefenders
 			Neprijatelj.Clear();
 		}
 
-		private void EndGame(string message)
+		public void EndGame(string message)
 		{
 			gameTimer.Stop();
 			NeprijateljTimer.Stop();

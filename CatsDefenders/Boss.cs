@@ -29,13 +29,13 @@ namespace CatsDefenders
         // Funkcija za kretanje Bossa
         public void Kretanje(MainForm form)
         {
-            BossPictureBox.Top += 2; // Boss se pomjera prema dolje
+            BossPictureBox.Top += 1; // Boss se pomjera prema dolje
 
             // Provjera sudara sa igračem
             if (BossPictureBox.Bounds.IntersectsWith(form.igrac.Bounds))
             {
-                form.zivoti -= 1;
-                // Eventualna logika za Game Over
+                form.EndGame("Ubio te BOSS!\t"); // Kraj igre ako je Boss dodirnuo igrača
+                
             }
         }
 

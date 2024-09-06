@@ -11,9 +11,9 @@ namespace CatsDefenders
 		public static void PostaviIgru(MainForm form)
 		{
 			form.Text = "Cats Defenders";
-			form.FormBorderStyle = FormBorderStyle.None;
-			form.WindowState = FormWindowState.Maximized;
-			form.Bounds = Screen.PrimaryScreen.Bounds;
+			//form.FormBorderStyle = FormBorderStyle.None;
+			//form.WindowState = FormWindowState.Maximized;
+			//form.Bounds = Screen.PrimaryScreen.Bounds;
 
 			// Postavlja labelu za bodove
 			form.bodoviLabel = KreirajLabelu("Bodovi: 0", new Point(10, 10));
