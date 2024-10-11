@@ -204,7 +204,10 @@ namespace CatsDefenders
 
 		public void DodajNevzu()
 		{
-			Neprijatelji.DodajNeprijatelja(this);
+			if (boss == null)
+				Neprijatelji.DodajNeprijatelja(this);
+			else
+				return;
 		}
 
 		public void levelFollow()
