@@ -12,7 +12,7 @@ namespace CatsDefenders
 
         public Boss(MainForm form)
         {
-            Health = 20; // Boss ima 20 zdravlja
+            Health = 20; // Boss ima 20 hp
 
             // Kreiranje PictureBox-a za Bossa
             BossPictureBox = new PictureBox
